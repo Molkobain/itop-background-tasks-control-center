@@ -1,0 +1,38 @@
+/*!
+ * Copyright (c) 2015 - 2020 Molkobain.
+ *
+ * This file is part of licensed extension.
+ *
+ * Use of this extension is bound by the license you purchased. A license grants you a non-exclusive and non-transferable right to use and incorporate the item in your personal or commercial projects. There are several licenses available (see https://www.molkobain.com/usage-licenses/ for more informations)
+ */
+
+/* Tooltips */
+.tippy-box[data-theme~="molkobain-light"] {
+	background-color: $mhf-color-white-100;
+	color: $mhf-color-grey-900;
+	@include mhf-box-shadow-regular;
+
+	&[data-placement^=top] > .tippy-arrow:before {
+		border-top-color: $mhf-color-white-100
+	}
+
+	&[data-placement^=bottom] > .tippy-arrow:before {
+		border-bottom-color: $mhf-color-white-100
+	}
+
+	&[data-placement^=left] > .tippy-arrow:before {
+		border-left-color: $mhf-color-white-100
+	}
+
+	&[data-placement^=right] > .tippy-arrow:before {
+		border-right-color: $mhf-color-white-100
+	}
+
+	> .tippy-backdrop {
+		background-color: $mhf-color-white-100
+	}
+
+	> .tippy-svg-arrow {
+		fill: $mhf-color-white-100
+	}
+}

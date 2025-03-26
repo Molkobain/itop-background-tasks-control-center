@@ -1,0 +1,12 @@
+{
+  "name": "molkobain/molkobain-background-tasks-control-center",
+  "license": "AGPLv3",
+  "autoload": {
+    "psr-4": {
+      "Molkobain\\iTop\\Extension\\BackgroundTasksControlCenter\\": "src/"
+    }
+  },
+  "config": {
+    "autoloader-suffix": "MolkobainBackgroundTasksControlCenter"
+  }
+}

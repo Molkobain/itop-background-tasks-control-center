@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.1">
+  <classes>
+    <class id="MIOBackgroundTaskReschedule" _delta="define">
+      <parent>cmdbAbstractObject</parent>
+      <properties>
+        <category>bizmodel</category>
+        <abstract>false</abstract>
+        <db_table>mio_backgroundtaskreschedule</db_table>
+        <naming>
+          <attributes>
+            <attribute id="class_name"/>
+          </attributes>
+        </naming>
+        <reconciliation>
+          <attributes>
+            <attribute id="backgroundtask_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="backgroundtask_id" xsi:type="AttributeExternalKey">
+          <sql>backgroundtask_id</sql>
+          <target_class>BackgroundTask</target_class>
+          <tracking_level>none</tracking_level>
+        </field>
+        <field id="class_name" xsi:type="AttributeExternalField">
+          <extkey_attcode>backgroundtask_id</extkey_attcode>
+          <target_attcode>class_name</target_attcode>
+        </field>
+        <field id="latest_run_date" xsi:type="AttributeExternalField">
+          <extkey_attcode>backgroundtask_id</extkey_attcode>
+          <target_attcode>latest_run_date</target_attcode>
+        </field>
+        <field id="next_run_date" xsi:type="AttributeDateTime">
+          <sql>next_run_date</sql>
+          <default_value />
+          <is_null_allowed>false</is_null_allowed>
+          <tracking_level>none</tracking_level>
+        </field>
+      </fields>
+      <presentation>
+        <details>
+          <items>
+            <item id="backgroundtask_id">
+              <rank>10</rank>
+            </item>
+            <item id="latest_run_date">
+              <rank>20</rank>
+            </item>
+            <item id="next_run_date">
+              <rank>30</rank>
+            </item>
+          </items>
+        </details>
+      </presentation>
+      <event_listeners>
+        <event_listener id="OnCreateUpdateCorrespondingBackgroundTaskAndDeleteSelf">
+          <event>EVENT_DB_AFTER_WRITE</event>
+          <callback>OnCreateUpdateCorrespondingBackgroundTaskAndDeleteSelf</callback>
+          <rank>0</rank>
+        </event_listener>
+      </event_listeners>
+      <methods>
+        <method id="OnCreateUpdateCorrespondingBackgroundTaskAndDeleteSelf">
+          <comment></comment>
+          <static>false</static>
+          <access>protected</access>
+          <code><![CDATA[
+	protected function OnCreateUpdateCorrespondingBackgroundTaskAndDeleteSelf(Combodo\iTop\Service\Events\EventData $oEventData): void
+	{
+	    // Update original background task with new "next_run_date"
+        $oOriginalBT = MetaModel::GetObject(BackgroundTask::class, $this->Get('backgroundtask_id'), true, true);
+        $oOriginalBT->Set('next_run_date', $this->Get('next_run_date'));
+        $oOriginalBT->DBUpdate();
+
+        // Delete previous temporary background task reschedules
+		// Note: We can't delete the current one as it would throw an exception in \DBObject::DBInsertNoReload() when calling DBUpdate()...
+		$oSearch = DBObjectSearch::FromOQL('SELECT MIOBackgroundTaskReschedule WHERE id != :id');
+		$oSet = new DBObjectSet($oSearch, [], ['id' => $this->GetKey()]);
+		while ($oPreviousDummyObj = $oSet->Fetch()) {
+			$oPreviousDummyObj->DBDelete();
+		}
+	}
+]]></code>
+        </method>
+      </methods>
+    </class>
+    <class id="MIOAsyncTaskReschedule" _delta="define">
+      <parent>cmdbAbstractObject</parent>
+      <properties>
+        <category>bizmodel</category>
+        <abstract>false</abstract>
+        <db_table>mio_asynctaskreschedule</db_table>
+        <naming>
+          <attributes>
+            <attribute id="event_id_finalclass_recall"/>
+            <attribute id="created"/>
+          </attributes>
+        </naming>
+        <reconciliation>
+          <attributes>
+            <attribute id="asynctask_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="asynctask_id" xsi:type="AttributeExternalKey">
+          <sql>asynctask_id</sql>
+          <target_class>AsyncTask</target_class>
+          <tracking_level>none</tracking_level>
+        </field>
+        <field id="status" xsi:type="AttributeExternalField">
+          <extkey_attcode>asynctask_id</extkey_attcode>
+          <target_attcode>status</target_attcode>
+        </field>
+        <field id="event_id_finalclass_recall" xsi:type="AttributeExternalField">
+          <extkey_attcode>asynctask_id</extkey_attcode>
+          <target_attcode>event_id_finalclass_recall</target_attcode>
+        </field>
+        <field id="created" xsi:type="AttributeExternalField">
+          <extkey_attcode>asynctask_id</extkey_attcode>
+          <target_attcode>created</target_attcode>
+        </field>
+        <field id="started" xsi:type="AttributeExternalField">
+          <extkey_attcode>asynctask_id</extkey_attcode>
+          <target_attcode>started</target_attcode>
+        </field>
+        <field id="planned" xsi:type="AttributeDateTime">
+          <sql>planned</sql>
+          <default_value />
+          <is_null_allowed>false</is_null_allowed>
+          <tracking_level>none</tracking_level>
+        </field>
+        <field id="last_attempt" xsi:type="AttributeExternalField">
+          <extkey_attcode>asynctask_id</extkey_attcode>
+          <target_attcode>last_attempt</target_attcode>
+        </field>
+        <field id="last_error" xsi:type="AttributeExternalField">
+          <extkey_attcode>asynctask_id</extkey_attcode>
+          <target_attcode>last_error</target_attcode>
+        </field>
+      </fields>
+      <presentation>
+        <details>
+          <items>
+            <item id="asynctask_id">
+              <rank>10</rank>
+            </item>
+            <item id="status">
+              <rank>20</rank>
+            </item>
+            <item id="started">
+              <rank>30</rank>
+            </item>
+            <item id="last_attempt">
+              <rank>40</rank>
+            </item>
+            <item id="last_error">
+              <rank>50</rank>
+            </item>
+            <item id="planned">
+              <rank>60</rank>
+            </item>
+          </items>
+        </details>
+      </presentation>
+      <event_listeners>
+        <event_listener id="OnCreateUpdateCorrespondingAsyncTaskAndDeleteSelf">
+          <event>EVENT_DB_AFTER_WRITE</event>
+          <callback>OnCreateUpdateCorrespondingAsyncTaskAndDeleteSelf</callback>
+          <rank>0</rank>
+        </event_listener>
+      </event_listeners>
+      <methods>
+        <method id="OnCreateUpdateCorrespondingAsyncTaskAndDeleteSelf">
+          <comment></comment>
+          <static>false</static>
+          <access>protected</access>
+          <code><![CDATA[
+	protected function OnCreateUpdateCorrespondingAsyncTaskAndDeleteSelf(Combodo\iTop\Service\Events\EventData $oEventData): void
+	{
+	    // Update original async task with new "planned" date
+        $oOriginalAT = MetaModel::GetObject(AsyncTask::class, $this->Get('asynctask_id'), true, true);
+        $oOriginalAT->Set('planned', $this->Get('planned'));
+        $oOriginalAT->DBUpdate();
+
+        // Delete previous temporary async task reschedules
+		// Note: We can't delete the current one as it would throw an exception in \DBObject::DBInsertNoReload() when calling DBUpdate()...
+		$oSearch = DBObjectSearch::FromOQL('SELECT MIOAsyncTaskReschedule WHERE id != :id');
+		$oSet = new DBObjectSet($oSearch, [], ['id' => $this->GetKey()]);
+		while ($oPreviousDummyObj = $oSet->Fetch()) {
+			$oPreviousDummyObj->DBDelete();
+		}
+	}
+]]></code>
+        </method>
+      </methods>
+    </class>
+  </classes>
+  <menus>
+    <menu id="BackgroundTasksControlCenter" xsi:type="WebPageMenuNode" _delta="define_if_not_exists">
+      <rank>15</rank>
+      <parent>SystemTools</parent>
+      <url>$pages/UI.php?route=mio_background_tasks_control_center.display&amp;c[menu]=iTopSystemInformation</url>
+      <enable_class>ResourceSystemMenu</enable_class>
+      <enable_action>UR_ACTION_MODIFY</enable_action>
+    </menu>
+  </menus>
+  <branding>
+    <themes_common>
+      <stylesheets>
+        <stylesheet id="mbtcc_backoffice" _delta="define">molkobain-background-tasks-control-center/asset/css/backoffice.scss</stylesheet>
+      </stylesheets>
+    </themes_common>
+  </branding>
+  <module_parameters>
+    <parameters id="molkobain-background-tasks-control-center" _delta="define">
+      <task_lists_refresh_interval type="integer">10</task_lists_refresh_interval>
+    </parameters>
+  </module_parameters>
+</itop_design>

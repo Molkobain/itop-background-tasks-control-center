@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension format="1.0">
+	<extension_code>molkobain-background-tasks-control-center</extension_code>
+	<company>Molkobain</company>
+	<author><![CDATA[Guillaume Lajarige]]></author>
+	<label><![CDATA[Background tasks control center]]></label>
+	<description><![CDATA[Manage background tasks (pause, resume, removed), check their execution time. Also visualize async. tasks currently in queue.]]></description>
+	<version>1.0.0</version>
+	<release_date>2025-03-21</release_date>
+	<version_description><![CDATA[
+	* Initial version
+]]></version_description>
+	<itop_version_min>3.2.0</itop_version_min>
+	<status>stable</status>
+	<mandatory>false</mandatory>
+	<more_info_url>https://molkobain.github.io/itop-extensions-documentation/molkobain-background-tasks-control-center</more_info_url>
+</extension>

@@ -1,0 +1,60 @@
+/* Style BackgroundTask::status */
+.ibo-datatable [data-object-class="BackgroundTask"],
+.ibo-datatable [data-object-class="AsyncTask"]{
+  &[data-attribute-code="status"] {
+    span {
+      @extend %ibo-baseline-centered-content;
+      text-transform: capitalize;
+
+      &::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        @extend %ibo-border-radius-full;
+        margin-right: 0.5rem;
+        background-color: $ibo-lifecycle-neutral-state-primary-color;
+      }
+    }
+
+    &[data-value-raw="active"] span::before {
+      background-color: $ibo-lifecycle-active-state-primary-color;
+    }
+    &[data-value-raw="paused"] span::before {
+      background-color: $ibo-lifecycle-inactive-state-primary-color;
+    }
+    &[data-value-raw="removed"] span::before {
+      background-color: $ibo-lifecycle-frozen-state-primary-color;
+    }
+
+    &[data-value-raw="planned"] span::before {
+      background-color: $ibo-lifecycle-neutral-state-primary-color;
+    }
+    &[data-value-raw="running"] span::before {
+      background-color: $ibo-lifecycle-active-state-primary-color;
+    }
+    &[data-value-raw="idle"] span::before {
+      background-color: $ibo-lifecycle-waiting-state-primary-color;
+    }
+    &[data-value-raw="error"] span::before {
+      background-color: $ibo-lifecycle-failure-state-primary-color;
+    }
+  }
+}
+
+/* Hide buttons depending on current status */
+/* - BackgroundTask */
+.ibo-datatable [data-object-class="BackgroundTask"][data-attribute-code="status"][data-value-raw="active"] ~ td .ibo-toolbar .ibo-button:nth-child(1),
+.ibo-datatable [data-object-class="BackgroundTask"][data-attribute-code="status"][data-value-raw="paused"] ~ td .ibo-toolbar .ibo-button:nth-child(2),
+.ibo-datatable [data-object-class="BackgroundTask"][data-attribute-code="status"][data-value-raw="removed"] ~ td .ibo-toolbar .ibo-button {
+  display: none;
+}
+
+/* Loader */
+.mbtcc-is-loading {
+  text-align: center !important; /* important to overcome the more accurate rules */
+  vertical-align: middle !important; /* important to overcome the more accurate rules */
+
+  .ibo-toolbar {
+    display: none;
+  }
+}
