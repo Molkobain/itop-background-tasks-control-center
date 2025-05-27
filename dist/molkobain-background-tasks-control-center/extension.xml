@@ -5,10 +5,10 @@
 	<author><![CDATA[Guillaume Lajarige]]></author>
 	<label><![CDATA[Background tasks control center]]></label>
 	<description><![CDATA[Manage background tasks (pause, resume, removed), check their execution time. Also visualize async. tasks currently in queue.]]></description>
-	<version>1.0.0</version>
-	<release_date>2025-03-21</release_date>
+	<version>1.1.0</version>
+	<release_date>2025-05-27</release_date>
 	<version_description><![CDATA[
-	* Initial version
+	* Add Czech translations thanks to Pavel Stetinac ([@Stetinac](https://github.com/Stetinac))
 ]]></version_description>
 	<itop_version_min>3.2.0</itop_version_min>
 	<status>stable</status>

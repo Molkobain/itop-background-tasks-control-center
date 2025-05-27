@@ -2,7 +2,7 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'molkobain-background-tasks-control-center/1.0.0', [
+	'molkobain-background-tasks-control-center/1.1.0', [
 		// Identification
 		'label' => 'Background tasks control center',
 		'category' => 'Administration',
